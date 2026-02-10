@@ -118,43 +118,13 @@ function initToc(): void {
     tocScrollHandler = null;
   }
 
-  const postContent = document.getElementById('post-content');
   const tocContainer = document.getElementById('toc-container');
   const tocLinksList = document.getElementById('toc-links-list');
 
-  if (!postContent || !tocContainer || !tocLinksList) return;
+  if (!tocContainer || !tocLinksList) return;
 
-  const headings = postContent.querySelectorAll('h2, h3, h4');
-  if (headings.length === 0) return;
-
-  // Ensure headings have IDs for anchor links
-  headings.forEach((heading) => {
-    if (!heading.id) {
-      heading.id = heading.textContent?.trim().replace(/\s+/g, '-').toLowerCase() || '';
-    }
-  });
-
-  // Build TOC list
-  const fragment = document.createDocumentFragment();
-  headings.forEach((heading) => {
-    const depth = parseInt(heading.tagName[1], 10);
-    const li = document.createElement('li');
-
-    // Indent levels matching original
-    if (depth === 3) li.classList.add('ml-4');
-    if (depth === 4) li.classList.add('ml-8');
-
-    const a = document.createElement('a');
-    a.href = `#${heading.id}`;
-    a.textContent = heading.textContent?.trim() || '';
-    a.classList.add('no-heti', `toc-links-h${depth}`);
-
-    li.appendChild(a);
-    fragment.appendChild(li);
-  });
-
-  tocLinksList.appendChild(fragment);
-  tocContainer.style.display = '';
+  // Skip if no TOC items (inline script hid the container, or no headings)
+  if (tocLinksList.children.length === 0) return;
 
   // Auto-scroll active TOC link on desktop
   const is2xl = window.matchMedia('(min-width: 1536px)');

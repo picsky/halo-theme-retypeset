@@ -40,7 +40,7 @@
       <div
         id="toc-container"
         class="mb-6 uno-round-border bg-secondary/5 2xl:fixed 2xl:left-0 2xl:top-44.5 2xl:max-w-[min(calc(50vw-38rem),13rem)] 2xl:border-none 2xl:bg-secondary/0"
-        style="display:none;"
+        data-toc-pending
       >
         <input type="checkbox" id="toc-toggle" hidden />
         <div class="relative h-12 w-full">
@@ -98,6 +98,44 @@
           ></halo:comment>
         </div>
       </div>
+
+      <!-- Sync TOC population (runs before first paint, visually equivalent to SSR) -->
+      <script>
+        ;(function() {
+          var content = document.getElementById('post-content');
+          var container = document.getElementById('toc-container');
+          var list = document.getElementById('toc-links-list');
+          if (!content || !container || !list) return;
+          var headings = content.querySelectorAll('h2, h3, h4');
+          if (headings.length === 0) { container.style.display = 'none'; return; }
+          var used = {};
+          headings.forEach(function(h) {
+            if (!h.id) {
+              var base = h.textContent.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^\w\u4e00-\u9fff-]/g, '');
+              var id = base || 'heading';
+              var n = 1;
+              while (used[id]) { id = base + '-' + n++; }
+              h.id = id;
+            }
+            used[h.id] = true;
+          });
+          var frag = document.createDocumentFragment();
+          headings.forEach(function(h) {
+            var depth = parseInt(h.tagName[1], 10);
+            var li = document.createElement('li');
+            if (depth === 3) li.className = 'ml-4';
+            if (depth === 4) li.className = 'ml-8';
+            var a = document.createElement('a');
+            a.href = '#' + h.id;
+            a.textContent = h.textContent.trim();
+            a.className = 'no-heti toc-links-h' + depth;
+            li.appendChild(a);
+            frag.appendChild(li);
+          });
+          list.appendChild(frag);
+          container.removeAttribute('data-toc-pending');
+        })();
+      </script>
     </article>
   </th:block>
 </html>

@@ -67,6 +67,10 @@ html[data-theme-changing] [data-disable-theme-toggle-transition] {
   }
 }
 
+#toc-container[data-toc-pending] {
+  display: none;
+}
+
 @media (max-width: 1535px) {
   #toc-container {
     opacity: 0;
