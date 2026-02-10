@@ -1,3 +1,14 @@
+/*
+ * Third-party comment plugin styles (Twikoo & Waline).
+ *
+ * The theme uses Halo's built-in <halo:comment> component by default,
+ * which renders inside Shadow DOM — these rules do NOT affect it.
+ *
+ * These styles are preserved for users who install Halo's third-party
+ * comment plugins (e.g. plugin-comment-widget-twikoo, plugin-comment-widget-waline).
+ * They provide theme-consistent styling if those plugins render outside Shadow DOM.
+ */
+
 /* Twikoo */
 #twikoo svg,
 #twikoo .tk-action-count {
