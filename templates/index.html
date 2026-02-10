@@ -1,0 +1,85 @@
+<!doctype html>
+<html
+  xmlns:th="https://www.thymeleaf.org"
+  th:replace="~{modules/layout :: html(title = ${site.title}, content = ~{::content}, head = null, footer = null, sidebar = null, contentClass = '', isPostPage = false)}"
+>
+  <th:block th:fragment="content">
+    <!-- Decorative Line -->
+    <div class="uno-decorative-line"></div>
+
+    <!-- Post List (matching PostList.astro) -->
+    <ul th:if="${posts.total gt 0}">
+      <li th:each="post : ${posts.items}" th:data-post-name="${post.metadata.name}" class="mb-5.5 lg:mb-10">
+        <!-- Post Title (inline h3, link only on title) -->
+        <h3 class="inline transition-colors hover:c-primary">
+          <a
+            th:href="@{${post.status.permalink}}"
+            class="cjk:tracking-wide lg:font-medium lg:text-4.5"
+            th:text="${post.spec.title}"
+          ></a>
+          <!-- Pinned Icon (inline after title) -->
+          <svg
+            th:if="${post.spec.pinned}"
+            aria-hidden="true"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            class="ml-0.25em inline-block aspect-square w-0.98em translate-y--0.1em lg:w-1.05em lg:translate-y--0.15em"
+          >
+            <path d="M18 3V5H17V11L19.0047 12.4037C19.5681 12.8224 19.4655 13 19.4655 13H4.51C4.51 13 4.40737 12.8224 4.97076 12.4037L7 11V5H6V3H18ZM11 14V22H13V14H11Z" />
+          </svg>
+        </h3>
+
+        <!-- Mobile Post Date (below title, hidden on desktop) -->
+        <div data-post-date="mobile" class="py-0.8 text-3.5 font-time lg:hidden">
+          <time th:text="${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}"></time>
+        </div>
+
+        <!-- Desktop Post Date (inline after title, hidden on mobile) -->
+        <div data-post-date="desktop" class="hidden text-3.65 font-time lg:ml-2.5 lg:inline">
+          <time th:text="${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}"></time>
+        </div>
+
+        <!-- Desktop Post Excerpt -->
+        <div
+          th:if="${not #strings.isEmpty(post.status.excerpt)}"
+          class="heti hidden"
+          lg="mt-2.25 block"
+        >
+          <p th:text="${#strings.abbreviate(post.status.excerpt, 120)}"></p>
+        </div>
+
+        <!-- Decorative Line -->
+        <div class="uno-decorative-line mt-5.5 lg:mt-10"></div>
+      </li>
+    </ul>
+
+    <!-- Empty State -->
+    <div th:if="${posts.total == 0}" class="text-center py-12 c-secondary">
+      <span th:text="${t_no_posts}"></span>
+    </div>
+
+    <!-- Pagination -->
+    <nav
+      th:if="${posts.hasPrevious() || posts.hasNext()}"
+      class="mt-4 grid grid-cols-[1fr_auto_1fr] items-center font-navbar text-3.5 lg:mt-6"
+    >
+      <div>
+        <a
+          th:if="${posts.hasPrevious()}"
+          th:href="@{${posts.prevUrl}}"
+          class="highlight-hover py-0.8 c-secondary transition-colors after:bottom-0.35em hover:c-primary"
+          th:text="${t_prev}"
+        ></a>
+      </div>
+      <span class="c-secondary/60 font-time" th:text="${posts.page} + ' / ' + ${posts.totalPages}"></span>
+      <div class="text-right">
+        <a
+          th:if="${posts.hasNext()}"
+          th:href="@{${posts.nextUrl}}"
+          class="highlight-hover py-0.8 c-secondary transition-colors after:bottom-0.35em hover:c-primary"
+          th:text="${t_next}"
+        ></a>
+      </div>
+    </nav>
+  </th:block>
+</html>

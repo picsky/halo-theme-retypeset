@@ -1,0 +1,66 @@
+<th:block th:fragment="base-head(title, isPostPage)">
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="oklch(96% 0.005 298)" />
+  <title th:text="${title}"></title>
+
+  <!-- Favicon -->
+  <link th:unless="${#strings.isEmpty(site.favicon)}" rel="icon" th:href="${site.favicon}" />
+
+  <!-- Font Preloads (th:href resolves to /themes/theme-retypeset/assets/...) -->
+  <link rel="preload" th:href="@{/assets/fonts/EarlySummer-VF-Split/EarlySummer-VF-Subset.woff2}" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" th:href="@{/assets/fonts/Snell-Black-SF.woff2}" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" th:href="@{/assets/fonts/Snell-Bold-SF.woff2}" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" th:href="@{/assets/fonts/STIX-VF.woff2}" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" th:href="@{/assets/fonts/STIX-Italic-VF.woff2}" as="font" type="font/woff2" crossorigin />
+
+  <!-- Font CSS (loaded separately, not bundled by Vite, so relative URLs resolve correctly) -->
+  <link rel="stylesheet" th:href="@{/assets/styles/font.css}" />
+
+  <!-- Inline theme + motion initialization to prevent FOUC (must run before CSS) -->
+  <script th:inline="javascript">
+    ;(function() {
+      var colorMode = /*[[${theme.config.general.color_mode ?: 'system'}]]*/ 'system'
+      var saved = localStorage.getItem('theme')
+      var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+      var isDark
+      if (saved) {
+        isDark = saved === 'dark'
+      } else if (colorMode === 'dark') {
+        isDark = true
+      } else if (colorMode === 'light') {
+        isDark = false
+      } else {
+        isDark = prefersDark
+      }
+      if (isDark) {
+        document.documentElement.classList.add('dark')
+        var meta = document.querySelector('meta[name="theme-color"]')
+        if (meta) meta.setAttribute('content', 'oklch(22% 0.005 298)')
+      }
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('reduce-motion')
+      }
+    })()
+  </script>
+
+  <!-- CSS Styles (all bundled via Vite/UnoCSS, includes preset-theme dark mode) -->
+  <link rel="stylesheet" th:href="@{/assets/dist/style.css?v={version}(version=${theme.spec.version})}" />
+
+  <!-- Custom Head from settings -->
+  <th:block th:utext="${theme.config.advanced.custom_head}" />
+
+  <!-- Theme Settings for JavaScript -->
+  <script th:inline="javascript" id="theme-settings" type="application/json">
+    {
+      "colorMode": [[${theme.config.general.color_mode ?: 'system'}]],
+      "fontStyle": [[${theme.config.general.font_style ?: 'sans'}]],
+      "enableTransition": [[${theme.config.advanced.enable_transition ?: true}]],
+      "customCss": [[${theme.config.advanced.custom_css ?: ''}]]
+    }
+  </script>
+
+  <!-- Scripts -->
+  <script defer th:src="@{/assets/dist/main.iife.js?v={version}(version=${theme.spec.version})}"></script>
+</th:block>

@@ -1,0 +1,53 @@
+<!doctype html>
+<html
+  xmlns:th="https://www.thymeleaf.org"
+  th:replace="~{modules/layout :: html(title = ${category.spec.displayName} + ' - ' + ${site.title}, content = ~{::content}, head = null, footer = null, sidebar = null, contentClass = '', isPostPage = false)}"
+>
+  <th:block th:fragment="content">
+    <!-- Decorative Line -->
+    <div class="uno-decorative-line"></div>
+
+    <!-- Post List (matching PostList.astro) -->
+    <ul th:if="${posts.total gt 0}">
+      <li th:each="post : ${posts.items}" th:data-post-name="${post.metadata.name}" class="mb-5.5">
+        <h3 class="inline transition-colors hover:c-primary">
+          <a
+            th:href="@{${post.status.permalink}}"
+            class="cjk:tracking-wide"
+            th:text="${post.spec.title}"
+          ></a>
+        </h3>
+        <div data-post-date="mobile" class="py-0.8 text-3.5 font-time lg:hidden">
+          <time th:text="${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}"></time>
+        </div>
+        <div data-post-date="desktop" class="hidden text-3.65 font-time lg:ml-2.5 lg:inline">
+          <time th:text="${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}"></time>
+        </div>
+      </li>
+    </ul>
+
+    <!-- Pagination -->
+    <nav
+      th:if="${posts.hasPrevious() || posts.hasNext()}"
+      class="mt-8 grid grid-cols-[1fr_auto_1fr] items-center font-navbar text-3.5"
+    >
+      <div>
+        <a
+          th:if="${posts.hasPrevious()}"
+          th:href="@{${posts.prevUrl}}"
+          class="highlight-hover py-0.8 c-secondary transition-colors after:bottom-0.35em hover:c-primary"
+          th:text="${t_prev}"
+        ></a>
+      </div>
+      <span class="c-secondary/60 font-time" th:text="${posts.page} + ' / ' + ${posts.totalPages}"></span>
+      <div class="text-right">
+        <a
+          th:if="${posts.hasNext()}"
+          th:href="@{${posts.nextUrl}}"
+          class="highlight-hover py-0.8 c-secondary transition-colors after:bottom-0.35em hover:c-primary"
+          th:text="${t_next}"
+        ></a>
+      </div>
+    </nav>
+  </th:block>
+</html>

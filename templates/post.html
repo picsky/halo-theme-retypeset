@@ -1,0 +1,103 @@
+<!doctype html>
+<html
+  xmlns:th="https://www.thymeleaf.org"
+  th:replace="~{modules/layout :: html(title = ${post.spec.title} + ' - ' + ${site.title}, content = ~{::content}, head = null, footer = null, sidebar = null, contentClass = '', isPostPage = true)}"
+>
+  <th:block th:fragment="content">
+    <article class="heti" th:data-post-name="${post.metadata.name}">
+      <!-- Back Button + Title wrapper (matching original) -->
+      <div class="relative">
+        <!-- Go Back Button (desktop only) -->
+        <button
+          id="back-button"
+          class="hidden"
+          lg="absolute left--10 top-3.8 block aspect-square w-4.5 c-secondary/60 transition-colors ease-out hover:c-primary active:scale-90!"
+          type="button"
+          th:aria-label="${t_go_back}"
+        >
+          <svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M7.82843 10.9999H20V12.9999H7.82843L13.1924 18.3638L11.7782 19.778L4 11.9999L11.7782 4.22168L13.1924 5.63589L7.82843 10.9999Z" />
+          </svg>
+        </button>
+        <!-- Title -->
+        <h1 class="post-title">
+          <span th:text="${post.spec.title}"></span>
+        </h1>
+      </div>
+
+      <!-- Date -->
+      <div
+        id="post-date"
+        class="mb-17.2 block c-primary font-time"
+      >
+        <time
+          th:datetime="${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}"
+          th:text="${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}"
+        ></time>
+      </div>
+
+      <!-- TOC (CSS-only accordion matching original TOC.astro) -->
+      <div
+        id="toc-container"
+        class="mb-6 uno-round-border bg-secondary/5 2xl:fixed 2xl:left-0 2xl:top-44.5 2xl:max-w-[min(calc(50vw-38rem),13rem)] 2xl:border-none 2xl:bg-secondary/0"
+        style="display:none;"
+      >
+        <input type="checkbox" id="toc-toggle" hidden />
+        <div class="relative h-12 w-full">
+          <label
+            for="toc-toggle"
+            class="absolute inset-0 flex cursor-pointer items-center 2xl:static 2xl:flex 2xl:c-secondary/60 2xl:transition-colors 2xl:ease-out 2xl:hover:c-primary"
+          >
+            <span id="toc-mobile-text" th:text="${t_toc}">TOC</span>
+            <svg
+              id="toc-desktop-icon"
+              aria-hidden="true"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              class="ml-4 hidden aspect-square w-4.2 2xl:mt-4 2xl:block 2xl:origin-center 2xl:active:scale-90!"
+            >
+              <path d="M3 4H21V6H3V4ZM3 11H15V13H3V11ZM3 18H21V20H3V18Z" />
+            </svg>
+          </label>
+        </div>
+        <div id="toc-accordion-wrapper">
+          <nav id="toc-accordion-content" th:aria-label="${t_toc}">
+            <ul id="toc-links-list"></ul>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div id="post-content">
+        <div th:utext="${post.content.content}"></div>
+
+        <!-- Copyright placeholder -->
+        <div id="post-copyright"></div>
+
+        <!-- Tag List -->
+        <th:block th:if="${post.tags != null && !post.tags.isEmpty()}">
+          <div class="mt-12.6 uno-decorative-line"></div>
+          <div class="no-heti flex flex-wrap gap-x-3 gap-y-3.2">
+            <a
+              th:each="tag : ${post.tags}"
+              th:href="@{${tag.status.permalink}}"
+              class="relative inline-block border border-secondary/25 rounded-full px-3.2 py-0.7 ring-0 ring-secondary/80 transition-[colors,box-shadow] ease-out hover:border-secondary/80 hover:c-primary hover:font-medium hover:ring-0.2"
+            >
+              <span class="absolute inset-0 flex items-center justify-center whitespace-nowrap transition-font-weight" th:text="${tag.spec.displayName}"></span>
+              <span class="inline-block font-medium opacity-0" aria-hidden="true" th:text="${tag.spec.displayName}"></span>
+            </a>
+          </div>
+        </th:block>
+
+        <!-- Comment -->
+        <div class="mt-16">
+          <halo:comment
+            group="content.halo.run"
+            kind="Post"
+            th:name="${post.metadata.name}"
+          ></halo:comment>
+        </div>
+      </div>
+    </article>
+  </th:block>
+</html>

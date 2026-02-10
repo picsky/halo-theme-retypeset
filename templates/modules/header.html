@@ -1,0 +1,50 @@
+<!-- Header - matches original Header.astro -->
+<th:block th:fragment="header(isPostPage)">
+  <header
+    th:classappend="${isPostPage ? 'mb-10.8' : 'mb-10.5'}"
+    class="lg:uno-desktop-column lg:top-20 cjk:tracking-wide"
+  >
+    <!-- Site Title: h2 on post pages, h1 on other pages -->
+    <th:block th:if="${isPostPage}">
+      <h2
+        class="font-bold font-title mb-2.8 mt-3 text-5.375 c-secondary lg:mb-1.8 lg:mt-0 lg:text-9 lg:c-primary"
+      >
+        <div class="box-content inline-block pr-1" data-disable-theme-toggle-transition>
+          <a id="site-title-link" href="/">
+            <img th:if="${useLogoImage}" th:src="${site.logo}" th:alt="${site.title}" class="h-6 lg:h-9" />
+            <span th:unless="${useLogoImage}" th:text="${site.title}"></span>
+          </a>
+        </div>
+      </h2>
+    </th:block>
+    <th:block th:unless="${isPostPage}">
+      <h1
+        class="font-bold font-title mb-1.8 w-75% text-8 c-primary lg:w-full lg:text-9"
+      >
+        <div class="box-content inline-block pr-1" data-disable-theme-toggle-transition>
+          <a id="site-title-link" href="/">
+            <img th:if="${useLogoImage}" th:src="${site.logo}" th:alt="${site.title}" class="h-8 lg:h-9" />
+            <span th:unless="${useLogoImage}" th:text="${site.title}"></span>
+          </a>
+        </div>
+      </h1>
+    </th:block>
+
+    <!-- Subtitle -->
+    <th:block th:if="${not #strings.isEmpty(site.subtitle)}">
+      <th:block th:if="${isPostPage}">
+        <div
+          class="text-3.5 c-secondary font-navbar lg:text-4 op-0 lg:op-100"
+          aria-hidden="true"
+          th:text="${site.subtitle}"
+        ></div>
+      </th:block>
+      <th:block th:unless="${isPostPage}">
+        <h2
+          class="text-3.5 c-secondary font-navbar lg:text-4 w-75% lg:w-full"
+          th:text="${site.subtitle}"
+        ></h2>
+      </th:block>
+    </th:block>
+  </header>
+</th:block>

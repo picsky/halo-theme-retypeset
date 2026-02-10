@@ -1,0 +1,131 @@
+html {
+  --at-apply: 'bg-background c-secondary antialiased';
+  scrollbar-width: thin;
+  scrollbar-color: oklch(var(--un-preset-theme-colors-secondary) / 0.25) transparent;
+  scrollbar-gutter: stable;
+  text-autospace: normal;
+}
+
+/* Fix Flash Issue On iOS */
+body {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+body::selection {
+  --at-apply: 'bg-highlight';
+}
+
+/* Highlight Hover Animation >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+.highlight-static,
+.highlight-hover {
+  --at-apply: 'relative inline-block';
+}
+.highlight-static::after,
+.highlight-hover::after {
+  --at-apply: 'absolute left-0 z--1 h-0.5em w-full bg-highlight';
+  content: '';
+}
+.highlight-static::after,
+.highlight-hover:hover::after {
+  --at-apply: 'origin-bottom-left scale-x-100';
+}
+.highlight-hover::after {
+  --at-apply: 'origin-bottom-right scale-x-0 transition-transform ease-out lg:duration-300';
+}
+
+/* Heading Anchor Link >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+.heading-anchor-link {
+  --at-apply: 'inline-block translate-y-0.1em';
+}
+h1:hover .heading-anchor-link svg,
+h2:hover .heading-anchor-link svg,
+h3:hover .heading-anchor-link svg,
+h4:hover .heading-anchor-link svg {
+  --at-apply: 'op-40';
+}
+.heading-anchor-link svg {
+  --at-apply: 'ml-0.4em aspect-square w-0.9em op-0 transition-opacity ease-out active:scale-90';
+}
+h1:hover .heading-anchor-link svg:hover,
+h2:hover .heading-anchor-link svg:hover,
+h3:hover .heading-anchor-link svg:hover,
+h4:hover .heading-anchor-link svg:hover {
+  --at-apply: 'op-80';
+}
+
+/* Image Zoom >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+.zoom-overlay {
+  --at-apply: 'fixed left-0 top-0 z-999 hidden h-full w-full cursor-zoom-out bg-background/95 op-0 transition-opacity duration-300';
+}
+.zoom-img {
+  --at-apply: 'fixed z-1000 cursor-zoom-out transition-transform duration-300';
+}
+
+/* Code Copy Button >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+.code-copy-button {
+  --at-apply: 'absolute right-2.2 top-2.2 z-99 grid aspect-square w-8 cursor-pointer place-items-center uno-round-border';
+  --at-apply: 'border-secondary/15 bg-background c-secondary/80 op-0 hover:(border-primary/15 c-primary/80)';
+  transition: opacity 0.15s ease-out, background-color 0.15s ease-out;
+}
+.code-block-wrapper:hover .code-copy-button {
+  --at-apply: 'op-100';
+}
+.icon-copy,
+.icon-check {
+  --at-apply: '[grid-area:1/1] aspect-square w-50%';
+}
+.icon-check {
+  --at-apply: 'op-0';
+}
+.code-copy-button.copied {
+  --at-apply: 'border-none bg-emerald-600 c-background';
+}
+html.dark .code-copy-button.copied {
+  --at-apply: 'bg-emerald-500';
+}
+.code-copy-button.copied .icon-copy {
+  --at-apply: 'op-0';
+}
+.code-copy-button.copied .icon-check {
+  --at-apply: 'op-100';
+}
+
+/* TOC Styles (matching original TOC.astro) >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+#toc-mobile-text {
+  --at-apply: 'ml-4 font-semibold 2xl:hidden';
+}
+#toc-links-list {
+  --at-apply: 'mb-2.5 mt-1 list-none pl-0 2xl:(mb-1 space-y-1) space-y-1.1';
+  scroll-target-group: auto;
+}
+a:target-current {
+  --at-apply: '2xl:(c-primary font-medium)';
+}
+.toc-links-h2, .toc-links-h3, .toc-links-h4 {
+  --at-apply: 'text-balance text-sm font-normal no-underline after:bottom-0.15em 2xl:(text-3.2 c-secondary/80 hover:c-primary hover:font-medium)';
+  transition: color 0.15s ease-out, font-weight 0.15s ease-out;
+}
+#toc-toggle:checked ~ #toc-accordion-wrapper #toc-accordion-content {
+  --at-apply: 'overflow-y-auto 2xl:overflow-hidden';
+}
+#toc-accordion-content {
+  --at-apply: 'max-h-59 overflow-hidden pl-4 pr-6 2xl:(max-h-[calc(100vh-27.5rem)] overflow-y-auto scrollbar-hidden)';
+  scrollbar-width: thin;
+  scrollbar-color: oklch(var(--un-preset-theme-colors-secondary) / 0.15) transparent;
+}
+#toc-accordion-content::-webkit-scrollbar {
+  --at-apply: 'hidden';
+}
+#toc-accordion-wrapper {
+  --at-apply: 'grid rows-[0fr]';
+  transition: grid-template-rows 0.3s ease-in-out;
+}
+#toc-toggle:checked ~ #toc-accordion-wrapper {
+  --at-apply: 'rows-[1fr]';
+}
+#toc-accordion-wrapper {
+  --at-apply: '2xl:rows-[1fr]';
+}
+#toc-toggle:checked ~ #toc-accordion-wrapper {
+  --at-apply: '2xl:rows-[0fr]';
+}

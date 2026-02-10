@@ -1,0 +1,54 @@
+<!doctype html>
+<html
+  xmlns:th="https://www.thymeleaf.org"
+  th:with="
+    lang=${theme.config.general.language ?: 'zh'},
+    t_posts=${lang == 'en' ? 'Posts' : '文章'},
+    t_tags=${lang == 'en' ? 'Tags' : '标签'},
+    t_categories=${lang == 'en' ? 'Categories' : '分类'},
+    t_prev=${lang == 'en' ? 'Previous' : '上一页'},
+    t_next=${lang == 'en' ? 'Next' : '下一页'},
+    t_no_posts=${lang == 'en' ? 'No posts' : '暂无文章'},
+    t_toc=${lang == 'en' ? 'Table of Contents' : '目录'},
+    t_go_back=${lang == 'en' ? 'Go back' : '返回'},
+    t_switch_theme=${lang == 'en' ? 'Switch theme' : '切换主题'},
+    t_site_nav=${lang == 'en' ? 'Site Navigation' : '站点导航'},
+    useLogoImage=${theme.config.general.logo_type == 'image' and not #strings.isEmpty(site.logo)}
+  "
+  th:lang="${lang == 'en' ? 'en' : 'zh-CN'}"
+  th:fragment="html (title, content, head, footer, sidebar, contentClass, isPostPage)"
+  th:classappend="${(theme.config.general.font_style == 'serif' ? 'font-serif' : 'font-sans') + (isPostPage ? ' scroll-smooth' : '')}"
+>
+  <head>
+    <th:block th:replace="~{modules/base-head :: base-head(title = ${title}, isPostPage = ${isPostPage})}" />
+
+    <th:block th:if="${head != null}">
+      <th:block th:replace="${head}" />
+    </th:block>
+  </head>
+
+  <body>
+    <div
+      class="mx-auto max-w-205.848 min-h-vh w-full min-h-dvh"
+      p="x-[min(7.25vw,3.731rem)] y-10"
+      lg="mx-[max(5.75rem,calc(50vw-34.25rem))] my-20 max-w-[min(calc(75vw-16rem),44rem)] min-h-full p-0"
+    >
+      <!-- Header -->
+      <th:block th:replace="~{modules/header :: header(isPostPage = ${isPostPage})}" />
+
+      <!-- Navbar -->
+      <th:block th:replace="~{modules/navbar :: navbar(isPostPage = ${isPostPage})}" />
+
+      <!-- Main Content -->
+      <main th:classappend="${isPostPage ? 'mb-10' : 'mb-12'}">
+        <th:block th:replace="${content}" />
+      </main>
+
+      <!-- Footer -->
+      <th:block th:replace="~{modules/footer}" />
+    </div>
+
+    <!-- Button (Theme Toggle) -->
+    <th:block th:replace="~{modules/button :: button}" />
+  </body>
+</html>

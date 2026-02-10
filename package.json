@@ -1,0 +1,30 @@
+{
+  "name": "halo-theme-retypeset",
+  "version": "1.0.0",
+  "description": "A typography-focused blog theme, adapted from astro-theme-retypeset for Halo.",
+  "scripts": {
+    "build": "pnpm run build-only && pnpm package",
+    "build-only": "tsc && vite build",
+    "dev": "vite build --watch",
+    "package": "npx @halo-dev/theme-package-cli"
+  },
+  "keywords": [
+    "halo",
+    "theme",
+    "blog",
+    "typography"
+  ],
+  "author": "radishzz",
+  "license": "MIT",
+  "packageManager": "pnpm@10.28.2",
+  "devDependencies": {
+    "@types/node": "^20.14.2",
+    "@unocss/preset-attributify": "^66.6.0",
+    "@unocss/reset": "^66.6.0",
+    "sass-embedded": "^1.97.3",
+    "typescript": "^5.9.3",
+    "unocss": "^66.6.0",
+    "unocss-preset-theme": "^0.14.1",
+    "vite": "^7.3.1"
+  }
+}

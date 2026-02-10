@@ -1,0 +1,34 @@
+<th:block th:fragment="footer">
+  <footer
+    class="text-3 leading-1.25em font-navbar"
+    lg="uno-desktop-column bottom-20 text-3.5"
+  >
+    <!-- Social Links -->
+    <p th:if="${theme.config.social != null && theme.config.social.social_links != null && !theme.config.social.social_links.isEmpty()}">
+      <th:block th:each="link, stat : ${theme.config.social.social_links}">
+        <a
+          th:href="${link.url}"
+          th:text="${link.name}"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="highlight-hover py-0.8 transition-colors after:bottom-0.35em hover:c-primary"
+        ></a>
+        <th:block th:if="${!stat.last}">/</th:block>
+      </th:block>
+    </p>
+
+    <!-- Copyright -->
+    <p>
+      © <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></span>
+      <span th:text="${site.title}"></span>
+    </p>
+
+    <!-- Powered by -->
+    <p>
+      Powered by <a class="highlight-hover py-0.8 transition-colors after:bottom-0.35em hover:c-primary" href="https://www.halo.run/" target="_blank" rel="noopener noreferrer">Halo</a> and <a class="highlight-hover py-0.8 transition-colors after:bottom-0.35em hover:c-primary" href="https://github.com/radishzzz/astro-theme-retypeset" target="_blank" rel="noopener noreferrer">Retypeset</a>
+    </p>
+
+    <!-- Halo Footer Injection -->
+    <halo:footer />
+  </footer>
+</th:block>
