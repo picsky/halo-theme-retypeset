@@ -1,42 +1,16 @@
-name: Release
+name: CD
 
 on:
-  push:
-    tags:
-      - 'v*'
+  release:
+    types:
+      - published
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  cd:
+    uses: halo-sigs/reusable-workflows/.github/workflows/theme-cd.yaml@v3
     permissions:
       contents: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build theme
-        run: pnpm build
-
-      - name: Get version from tag
-        id: version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: dist/*.zip
-          generate_release_notes: true
-          draft: false
-          prerelease: false
+    with:
+      skip-appstore-release: true
+      node-version: 22
+      pnpm-version: 9
