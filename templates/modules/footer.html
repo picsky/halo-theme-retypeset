@@ -23,6 +23,11 @@
       <span th:text="${site.title}"></span>
     </p>
 
+    <!-- ICP -->
+    <p th:if="${!#strings.isEmpty(theme.config.general.icp_number)}">
+      <a class="highlight-hover py-0.8 transition-colors after:bottom-0.35em hover:c-primary" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" th:text="${theme.config.general.icp_number}"></a>
+    </p>
+
     <!-- Powered by -->
     <p>
       Powered by <a class="highlight-hover py-0.8 transition-colors after:bottom-0.35em hover:c-primary" href="https://www.halo.run/" target="_blank" rel="noopener noreferrer">Halo</a> and <a class="highlight-hover py-0.8 transition-colors after:bottom-0.35em hover:c-primary" href="https://github.com/picsky/halo-theme-retypeset" target="_blank" rel="noopener noreferrer">Retypeset</a>

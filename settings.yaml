@@ -47,6 +47,12 @@ spec:
             - label: Logo 图片
               value: image
 
+        - $formkit: text
+          name: icp_number
+          label: ICP 备案号
+          value: ""
+          help: 填写后将在页脚展示，留空则不展示
+
     - group: advanced
       label: 高级设置
       formSchema:
